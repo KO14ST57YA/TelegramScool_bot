@@ -1,7 +1,7 @@
 from telegram.ext import Updater, CommandHandler
 
 
-TOKEN = '5818310273:AAESvwTSH4Zfj8laHkNueVwbN67k-6bXHJ0'
+TOKEN = '5818310273:AAGCTcgdbGxk2Mtuu69HlR5utfMuofMAfeU'
 def main():
      #
     updater = Updater(token=TOKEN)
