@@ -5,6 +5,7 @@ from telegram.ext import Filters
 from telegram.ext import MessageHandler
 from telegram.ext import CallbackContext
 from Key import TOKEN
+from yandex_weather import get_weather
 
 
 
@@ -18,12 +19,17 @@ def main():
     dispetcher.add_handler(
          CommandHandler('start', do_start)
     )
+    # dispetcher.add_handler(
+    #      MessageHandler(Filters.text(['Погода']), say_weather)
+    # )
+    # dispetcher.add_handler(
+    #      MessageHandler(Filters.text, do_keyboard)
+    #  )
     dispetcher.add_handler(
          MessageHandler(Filters.text, do_echo)
      )
-    dispetcher.add_handler(
-         MessageHandler(Filters.text, do_keyboard)
-     )
+
+
 
     # Бескончно просматривай обновления, пока работает код
     updater.start_polling()
@@ -35,8 +41,8 @@ def main():
 def do_start(update: Update, context: CallbackContext):
     text = 'Приветики, начнём?'
     update.message.reply_text(text)
-    #do_keyboard(update, context)
-    reply_keyboard(update, context)
+    do_keyboard(update, context)
+    # reply_keyboard(update, context)
 
 
 def do_echo(update: Update, context: CallbackContext):
@@ -59,7 +65,7 @@ def do_echo(update: Update, context: CallbackContext):
         '<pre language="c++">код</pre>',
         '<a href="1060.ru">Сайт школы</a>'
         ]
-    text = '\n'.join(lines_2) #Перевод каждой строчки на новую
+    text = '\n'.join(lines) #Перевод каждой строчки на новую
     update.message.reply_text(text, reply_markup=ReplyKeyboardRemove())
     update.message.reply_text(
         text,
@@ -73,18 +79,31 @@ def do_keyboard(update: Update, context: CallbackContext): #Функция, ко
     buttons = [ # 3 ряда кнопок
         ['Один', 'Два'],
         ['Три', 'Четыри'],
-        ['Пять']
+        ['Погода']
     ]
     keyboard = ReplyKeyboardMarkup(buttons) # клавиатура класса ReplyKeyboardMarkup
     text = 'Выбери одну из операций на клавиатуре'
     update.message.reply_text(text, reply_markup=keyboard)
 
-def reply_keyboard(update: Update, context: CallbackContext):
-    button = [
-        ['Yep', 'Nope']
+
+
+def say_weather(update: Update, context: CallbackContext): # Функция, которая запускает функцию погоды
+    weather = get_weather()
+    answer = [
+        f'Погода в городе {weather["Город"]}:',
+        f'Температура {weather["Температура"]}'
+
     ]
-    keyboard = ReplyKeyboardMarkup(button)
-    text = 'Выбери одну из операций на клавиатуре'
+    text = '\n'.join(answer)
+    update.message.reply_text(text)
+
+
+# def reply_keyboard(update: Update, context: CallbackContext):
+#     button = [
+#         ['Yep', 'Nope']
+#     ]
+#     keyboard = ReplyKeyboardMarkup(button)
+#     text = 'Выбери одну из операций на клавиатуре'
 
 
 
