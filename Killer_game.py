@@ -12,12 +12,14 @@ def main():
      #обьект, котрый ловит обновления
     updater = Updater(token=TOKEN)
      #Диспечер будет распределять события по обработчикам
-    dispetcher = updater.dispatcher
+    dispatcher = updater.dispatcher
 
      #Добавляем обработчик события из Telegram
-    dispetcher.add_handler(CommandHandler('start', do_start))
-    dispetcher.add_handler(CommandHandler('ask_for_name', ask_for_name))
-    dispetcher.add_handler(MessageHandler(Filters.text, do_help))
+    dispatcher.add_handler(CommandHandler('start', do_start))
+    dispatcher.add_handler(CommandHandler('ask_for_class', ask_for_class))
+    dispatcher.add_handler(CommandHandler('ask_for_name', ask_for_name))
+    dispatcher.add_handler(CommandHandler('get_class', get_class))
+    dispatcher.add_handler(MessageHandler(Filters.text, do_help))
 
     # Бескончно просматривай обновления, пока работает код
     updater.start_polling()
@@ -42,18 +44,56 @@ def do_start(update: Update, context: CallbackContext):
     pass
 
 def ask_for_class(update: Update, context: CallbackContext):
-    pass
+    text = [
+        'Введи номер своего класса.',
+        'Для этого набери команду get_class и через пробел номер и букву класса.',
+        'Например: /get_class 9н']
+    text = '\n'.join(text)
+    update.message.reply_text(text)
+
+
+def get_class(update: Update, context: CallbackContext):
+        grade = context.args
+        # можно вывести содержимое переменной grade, чтобы понять, что туда попало
+        print(grade)
+        text = f'Я запомнил твой класс: {grade}'
+        update.message.reply_text(text)
+        return ask_for_name(update, context)
+
+
+
 
 def ask_for_name(update: Update, context: CallbackContext):
-    text = 'Напиши своё имя и фамилию'
+    text = [
+        'Введи имя и фамилию.',
+        'Для этого набери команду get_name и имя и фамилию.',
+        'Например: /get_name Константин Невский']
+    text = '\n'.join(text)
     update.message.reply_text(text)
+
+
+
+def get_name(update: Update, context: CallbackContext):
+    name = context.args
+    # можно вывести содержимое переменной name, чтобы понять, что туда попало
+    print(name)
+    text = f'Я запомнил твой класс: {name}'
+    update.message.reply_text(text)
+    return ask_for_photo(update, context)
+
 
 
 def ask_for_photo(update: Update, context: CallbackContext):
     pass
 
-def register_player(update: Update, context: CallbackContext):
+
+def get_photo(update: Update, context: CallbackContext):
     pass
+
+
+def register_player(update: Update, context: CallbackContext):
+    all_spisok = []
+    return all_spisok
 
 if __name__ == '__main__':
     main()
