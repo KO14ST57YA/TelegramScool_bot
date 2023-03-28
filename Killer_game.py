@@ -4,8 +4,9 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram.ext import Filters
 from telegram.ext import MessageHandler
 from telegram.ext import CallbackContext
-from Key import TOKEN, ADMIN_AD
 
+from Key import TOKEN, ADMIN_AD
+from connect_to_database import write_to_db
 
 WAIT_FOR_CLASS, WAIT_FOR_NAME, WAIT_FOR_PHOTO = range(3)
 def main():
@@ -26,16 +27,16 @@ def main():
             fallbacks=[] # отлов ошибок
              )
     )
-    
+
     # dispatcher.add_handler(CommandHandler('ask_for_class', ask_for_class))
     # dispatcher.add_handler(CommandHandler('ask_for_name', ask_for_name))
     # dispatcher.add_handler(CommandHandler('get_class', get_class))
     dispatcher.add_handler(MessageHandler(Filters.text, do_help))
 
     # Бескончно просматривай обновления, пока работает код
-    updater.start_polling() 
-    print(updater.bot.getMe) 
-    print('Бот запущен') 
+    updater.start_polling()
+    print(updater.bot.getMe)
+    print('Бот запущен')
     updater.idle()
 
 
@@ -111,6 +112,10 @@ def get_photo(update: Update, context: CallbackContext):
 
 
 def register_player(update: Update, context: CallbackContext):
+    grade = context.user_data['class']
+    name = context.user_data['name']
+    photo = context.user_data['photo']
+    write_to_db(grade, name, photo)
 
     return ConversationHandler.END
 
