@@ -66,13 +66,13 @@ def ask_for_class(update: Update, context: CallbackContext):
 
 
 def get_class(update: Update, context: CallbackContext):
-        grade = update.message.text
-        # можно вывести содержимое переменной grade, чтобы понять, что туда попало
-        print(grade)
-        context.user_data['class'] = grade
-        text = f'Я запомнил твой класс: {grade}'
-        update.message.reply_text(text)
-        return ask_for_name(update, context)
+    grade = update.message.text
+    # можно вывести содержимое переменной grade, чтобы понять, что туда попало
+    print(grade)
+    context.user_data['class'] = grade
+    text = f'Я запомнил твой класс: {grade}'
+    update.message.reply_text(text)
+    return ask_for_name(update, context)
 
 
 def ask_for_name(update: Update, context: CallbackContext):
@@ -95,31 +95,36 @@ def get_name(update: Update, context: CallbackContext):
 
 
 def ask_for_photo(update: Update, context: CallbackContext):
-        text = [
-            'Пришли мне свою фотографию, чтобы я убедился, что это ты).']
-        text = '\n'.join(text)
-        update.message.reply_text(text)
-        return  WAIT_FOR_PHOTO
+    text = [
+        'Пришли мне свою фотографию, чтобы я убедился, что это ты).']
+    text = '\n'.join(text)
+    update.message.reply_text(text)
+    return  WAIT_FOR_PHOTO
 
 def get_photo(update: Update, context: CallbackContext):
-        photo = update.message.text
-        # можно вывести содержимое переменной name, чтобы понять, что туда попало
-        print(photo)
-        context.user_data['photo'] = photo
-        text = f'Поздравляю, ты зарегестрирован!'
-        update.message.reply_text(text)
-        return register_player
+    photo = update.message.text
+    # можно вывести содержимое переменной name, чтобы понять, что туда попало
+    print(photo)
+    context.user_data['photo'] = photo
+    text = f'Спасибо за фоточку!)'
+    update.message.reply_text(text)
+    return register_player
 
 
 def register_player(update: Update, context: CallbackContext):
     grade = context.user_data['class']
     name = context.user_data['name']
     photo = context.user_data['photo']
+
     write_to_db(grade, name, photo)
+
+    lines = ['Ты зарегестрирован!',
+             f'Ты учишься в классе {grade}',
+             f'Тебя зовут {name}']
+    text = '\n'.join(lines)
+    update.message.reply_text(text)
 
     return ConversationHandler.END
 
 if __name__ == '__main__':
     main()
-
-
