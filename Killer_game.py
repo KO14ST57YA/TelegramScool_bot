@@ -28,9 +28,6 @@ def main():
              )
     )
 
-    # dispatcher.add_handler(CommandHandler('ask_for_class', ask_for_class))
-    # dispatcher.add_handler(CommandHandler('ask_for_name', ask_for_name))
-    # dispatcher.add_handler(CommandHandler('get_class', get_class))
     dispatcher.add_handler(MessageHandler(Filters.text, do_help))
 
     # Бескончно просматривай обновления, пока работает код
@@ -95,36 +92,38 @@ def get_name(update: Update, context: CallbackContext):
 
 
 def ask_for_photo(update: Update, context: CallbackContext):
-    text = [
-        'Пришли мне свою фотографию, чтобы я убедился, что это ты).']
-    text = '\n'.join(text)
-    update.message.reply_text(text)
-    return  WAIT_FOR_PHOTO
+        text = [
+            'Пришли мне свою фотографию, чтобы я убедился, что это ты).']
+        text = '\n'.join(text)
+        update.message.reply_text(text)
+        return  WAIT_FOR_PHOTO
 
 def get_photo(update: Update, context: CallbackContext):
-    photo = update.message.text
-    # можно вывести содержимое переменной name, чтобы понять, что туда попало
-    print(photo)
-    context.user_data['photo'] = photo
-    text = f'Спасибо за фоточку!)'
-    update.message.reply_text(text)
-    return register_player
+        photo = update.message.text
+        # можно вывести содержимое переменной name, чтобы понять, что туда попало
+        print(photo)
+        context.user_data['photo'] = photo
+        text = f'Поздравляю, ты зарегестрирован!'
+        update.message.reply_text(text)
+        return register_player(update, context)
 
 
 def register_player(update: Update, context: CallbackContext):
+    user_id = update.message.from_user.id
     grade = context.user_data['class']
     name = context.user_data['name']
-    photo = context.user_data['photo']
+    photo = update.message.text
+    write_to_db(user_id, grade, name, photo)
 
-    write_to_db(grade, name, photo)
-
-    lines = ['Ты зарегестрирован!',
-             f'Ты учишься в классе {grade}',
-             f'Тебя зовут {name}']
-    text = '\n'.join(lines)
-    update.message.reply_text(text)
+    # lines = ['Ты зарегестрирован!',
+    #          f'Ты учишься в классе {grade}',
+    #          f'Тебя зовут {name}']
+    # text = '\n'.join(lines)
+    # update.message.reply_text(text)
 
     return ConversationHandler.END
 
 if __name__ == '__main__':
     main()
+
+
