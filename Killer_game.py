@@ -1,11 +1,11 @@
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
-from telegram.ext import Updater, updater
+from telegram import Update
+from telegram.ext import Updater
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram.ext import Filters
 from telegram.ext import MessageHandler
 from telegram.ext import CallbackContext
 
-from Key import TOKEN, ADMIN_AD
+from Key import TOKEN
 from connect_to_database import write_to_db
 
 WAIT_FOR_CLASS, WAIT_FOR_NAME, WAIT_FOR_PHOTO = range(3)
@@ -125,5 +125,3 @@ def register_player(update: Update, context: CallbackContext):
 
 if __name__ == '__main__':
     main()
-
-
