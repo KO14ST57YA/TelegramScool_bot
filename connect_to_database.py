@@ -21,5 +21,3 @@ def get_user_from_db(my_user_id):
             if str(my_user_id) == user_id:
                 return {'user_id': user_id, 'class': grade, 'name': name, 'photo': photo}
 
-
-print(get_user_from_db(856340203))
