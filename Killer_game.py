@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram.ext import Filters
@@ -46,15 +46,16 @@ def main():
 
 
 def do_help(update: Update, context: CallbackContext):
+
     text = [
-        'тестируем следующие функции: ',
-        '/ask_for_class',
-        '/ask_for_name',
-        '/ask_for_photo',
-        '/register_player',
+        'Привет. Этот бот пока <i>много</i> чего не <s>умеет</s>!',
+        'Но он запросто сможет тебя <u>зарегистрировать</u> :)',
+        'Также лови ссылку на сайт нашей школы: <a href="1060.ru">Сайт школы</a>',
+        f'Если будут вопросы, пиши сюда: @nevs_kostik'
+
     ]
     text = '\n'.join(text)
-    update.message.reply_text(text)
+    update.message.reply_text(text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 def do_start(update: Update, context: CallbackContext):
